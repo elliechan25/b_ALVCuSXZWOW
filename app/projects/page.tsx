@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectDetail } from "@/components/project-detail"
@@ -21,7 +21,7 @@ import { TaskCard } from "@/components/task-card"
 import { useAppStore } from "@/lib/store"
 import { cn } from "@/lib/utils"
 
-export default function ProjectsPage() {
+function ProjectsContent() {
   const searchParams = useSearchParams()
   const { updateTaskStatus, updateTask, deleteTask } = useAppStore()
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -226,5 +226,12 @@ export default function ProjectsPage() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+export default function ProjectsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProjectsContent />
+    </Suspense>
   )
 }
